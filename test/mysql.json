@@ -1,0 +1,25 @@
+{
+  "env": {
+    "spark.master": "local[2]",
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "user": "root",
+      "password": "ABCabc@123",
+      "table": "test.test_reader",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "env": {
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "table": "test_reader",
+      "user": "root",
+      "password": "ABCabc@123",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    },
+    {
+      "plugin_name": "mongodb",
+      "writeconfig.uri": "mongodb://127.0.0.1/test_db",
+      "writeconfig.database": "test_db",
+      "writeconfig.collection": "test_table"
+    }
+  ]
+}

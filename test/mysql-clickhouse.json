@@ -1,0 +1,40 @@
+{
+  "env": {
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "table": "test_reader",
+      "user": "root",
+      "password": "ABCabc@123",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    },
+    {
+      "plugin_name": "clickhouse",
+      "host": "localhost:8123",
+      "clickhouse.socket_timeout": 50000,
+      "database": "test",
+      "table": "test_ck",
+      "username": "root",
+      "password": "123456",
+      "bulk_size": 20000,
+      "fields": [
+        "id",
+        "name",
+        "age",
+        "address"
+      ]
+    }
+  ]
+}

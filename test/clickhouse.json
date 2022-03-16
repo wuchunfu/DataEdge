@@ -1,0 +1,24 @@
+{
+  "env": {
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "ru.yandex.clickhouse.ClickHouseDriver",
+      "url": "jdbc:clickhouse://127.0.0.1:8123/test",
+      "table": "test_ck",
+      "user": "root",
+      "password": "123456",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    }
+  ]
+}

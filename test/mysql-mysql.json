@@ -1,0 +1,57 @@
+{
+  "env": {
+    "spark.master": "local[2]",
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "user": "root",
+      "password": "ABCabc@123",
+      "table": "test.test_reader",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    },
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "user": "root",
+      "password": "ABCabc@123",
+      "dbTable": "test.test_writer",
+      "saveMode": "update",
+      "customUpdateStmt": "INSERT INTO test.test_writer (id, name, age, address) values(?, ?, ?, ?) ON DUPLICATE KEY UPDATE name = IFNULL(VALUES (name), name), address = IFNULL(VALUES (address), address)"
+    },
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "user": "root",
+      "password": "ABCabc@123",
+      "dbTable": "test.test_writer",
+      "saveMode": "update",
+      "duplicateIncs": "name = IFNULL(VALUES (name), name), address = IFNULL(VALUES (address), address)",
+      "showSql": "true"
+    },
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "user": "root",
+      "password": "ABCabc@123",
+      "dbTable": "test.test_writer",
+      "saveMode": "update",
+      "duplicateIncs": "name = name, address = address",
+      "showSql": "true"
+    }
+  ]
+}

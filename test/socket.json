@@ -1,0 +1,30 @@
+{
+  "env": {
+    "spark.master": "local[2]",
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "socketStream"
+    }
+  ],
+  "transform": [
+    {
+      "plugin_name": "split",
+      "source_field": "message",
+      "target_field": "info",
+      "fields": [
+        "msg",
+        "name"
+      ],
+      "separator": ","
+    }
+  ],
+  "sink": [
+    {
+      "plugin_name": "console"
+    }
+  ]
+}

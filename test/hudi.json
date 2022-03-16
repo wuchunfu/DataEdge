@@ -1,0 +1,21 @@
+{
+  "env": {
+    "spark.master": "local[2]",
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "hudi",
+      "hoodie.datasource.read.paths": "file:///tmp/test_reader/**",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "env": {
+    "spark.master": "local[2]",
+    "dfs.client.use.datanode.hostname": "true",
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "jdbc",
+      "driver": "com.mysql.cj.jdbc.Driver",
+      "url": "jdbc:mysql://10.1.2.108:3306/test",
+      "table": "test_reader",
+      "user": "root",
+      "password": "ABCabc@123",
+      "result_table_name": "test_reader"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    },
+    {
+      "plugin_name": "delta",
+      "delta.sink.path": "file:///tmp/test_reader",
+      "save_mode": "append"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "env": {
+    "spark.streaming.batchDuration": 5,
+    "spark.app.name": "seatunnel",
+    "spark.ui.port": 13000
+  },
+  "source": [
+    {
+      "plugin_name": "mongodb",
+      "readconfig.uri": "mongodb://127.0.0.1/test_db",
+      "readconfig.database": "test_db",
+      "readconfig.collection": "test_table",
+      "readconfig.spark.mongodb.input.partitioner": "MongoPaginateBySizePartitioner",
+      "schema": "{\"id\":\"string\",\"name\":\"string\",\"age\":\"integer\",\"address\":\"string\"}",
+      "result_table_name": "mongodb_result_table"
+    }
+  ],
+  "transform": [],
+  "sink": [
+    {
+      "plugin_name": "console"
+    }
+  ]
+}
