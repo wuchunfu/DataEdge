@@ -1,0 +1,12 @@
+*.go linguist-language=go
+*.java linguist-language=java
+*.scala linguist-language=scala
+*.py linguist-language=python
+*.sh linguist-language=shell
+*.bash linguist-language=shell
+*.js linguist-language=javascript
+*.ts linguist-language=typescript
+*.css linguist-language=css
+*.scss linguist-language=scss
+*.html linguist-language=html
+*.vue linguist-language=vue
