@@ -27,7 +27,7 @@
         <version>2.0.5-SNAPSHOT</version>
     </parent>
 
-    <artifactId>seatunnel-core-sql</artifactId>
+    <artifactId>seatunnel-core-flink-sql</artifactId>
 
     <dependencies>
         <dependency>
