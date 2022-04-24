@@ -18,8 +18,8 @@
 package org.apache.seatunnel;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.seatunnel.command.AbstractCommandArgs;
 import org.apache.seatunnel.command.Command;
-import org.apache.seatunnel.command.CommandArgs;
 import org.apache.seatunnel.command.CommandFactory;
 import org.apache.seatunnel.common.config.Common;
 import org.apache.seatunnel.common.config.ConfigRuntimeException;
@@ -35,7 +35,7 @@ public class Seatunnel {
      * @param commandArgs commandArgs
      * @param <T>         commandType
      */
-    public static <T extends CommandArgs> void run(T commandArgs) {
+    public static <T extends AbstractCommandArgs> void run(T commandArgs) {
 
         if (!Common.setDeployMode(commandArgs.getDeployMode().getName())) {
             throw new IllegalArgumentException(String.format("Deploy mode: %s is Illegal", commandArgs.getDeployMode()));

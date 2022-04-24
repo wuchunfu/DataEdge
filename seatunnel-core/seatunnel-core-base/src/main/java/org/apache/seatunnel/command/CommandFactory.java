@@ -32,12 +32,12 @@ public class CommandFactory {
      * @return Special command.s
      */
     @SuppressWarnings("unchecked")
-    public static <T extends org.apache.seatunnel.command.CommandArgs> org.apache.seatunnel.command.Command<T> createCommand(T commandArgs) {
+    public static <T extends AbstractCommandArgs> Command<T> createCommand(T commandArgs) {
         switch (commandArgs.getEngineType()) {
             case FLINK:
-                return (org.apache.seatunnel.command.Command<T>) new FlinkCommandBuilder().buildCommand((FlinkCommandArgs) commandArgs);
+                return (Command<T>) new FlinkCommandBuilder().buildCommand((FlinkCommandArgs) commandArgs);
             case SPARK:
-                return (org.apache.seatunnel.command.Command<T>) new SparkCommandBuilder().buildCommand((SparkCommandArgs) commandArgs);
+                return (Command<T>) new SparkCommandBuilder().buildCommand((SparkCommandArgs) commandArgs);
             default:
                 throw new RuntimeException(String.format("engine type: %s is not supported", commandArgs.getEngineType()));
         }
