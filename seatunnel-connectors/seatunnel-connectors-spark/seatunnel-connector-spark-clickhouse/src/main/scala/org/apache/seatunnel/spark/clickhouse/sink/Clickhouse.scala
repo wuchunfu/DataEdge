@@ -26,7 +26,7 @@ import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSink
 import org.apache.seatunnel.spark.clickhouse.sink.Clickhouse.{DistributedEngine, Shard}
 import org.apache.spark.sql.{Dataset, Row}
-import ru.yandex.clickhouse.except.{ClickHouseException, ClickHouseUnknownException}
+import ru.yandex.clickhouse.except.ClickHouseException
 import ru.yandex.clickhouse.{BalancedClickhouseDataSource, ClickHouseConnectionImpl}
 
 import java.math.{BigDecimal, BigInteger}
@@ -436,10 +436,8 @@ class Clickhouse extends SparkBatchSink {
         } else {
           throw e
         }
-      case Failure(e: ClickHouseUnknownException) =>
-        statement.close()
-        throw e
       case Failure(e: Exception) =>
+        statement.close()
         throw e
     }
   }
