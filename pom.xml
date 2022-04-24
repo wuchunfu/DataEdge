@@ -29,8 +29,8 @@
 
     <groupId>org.apache.seatunnel</groupId>
     <artifactId>DataEdge</artifactId>
+    <version>${revision}</version>
     <packaging>pom</packaging>
-    <version>2.0.5-SNAPSHOT</version>
 
     <name>DataEdge</name>
 
@@ -84,6 +84,7 @@
     </modules>
 
     <properties>
+        <revision>2.1.1-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <scala.version>2.11.12</scala.version>
