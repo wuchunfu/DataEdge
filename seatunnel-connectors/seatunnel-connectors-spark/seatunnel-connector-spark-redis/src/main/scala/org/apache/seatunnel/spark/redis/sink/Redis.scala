@@ -22,6 +22,7 @@ import com.redislabs.provider.redis.{RedisConfig, RedisEndpoint, toRedisContext}
 import org.apache.seatunnel.common.config.{CheckConfigUtil, CheckResult}
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSink
+import org.apache.seatunnel.spark.redis.common.Constants.{AUTH, DATA_TYPE, DB_NUM, DEFAULT_AUTH, DEFAULT_DATA_TYPE, DEFAULT_DB_NUM, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, HASH_NAME, HOST, LIST_NAME, PORT, SET_NAME, TIMEOUT, ZSET_NAME}
 import org.apache.seatunnel.spark.redis.common.RedisDataType
 import org.apache.spark.SparkContext
 import org.apache.spark.internal.Logging
@@ -32,6 +33,8 @@ import scala.collection.JavaConversions._
 class Redis extends SparkBatchSink with Logging {
 
   var redisDataType: RedisDataType.Value = _
+
+  override def getPluginName: String = "Redis"
 
   override def output(data: Dataset[Row], env: SparkEnvironment): Unit = {
     val redisConfigs = new RedisConfig(RedisEndpoint(

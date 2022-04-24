@@ -35,6 +35,8 @@ class Hudi extends SparkBatchSink {
   val recordKeyField = "hoodie.datasource.write.recordkey.field"
   val preCombineField = "hoodie.datasource.write.precombine.field"
 
+  override def getPluginName: String = "Hudi"
+
   override def checkConfig(): CheckResult = {
     checkAllExists(config, writePath, tableName)
   }

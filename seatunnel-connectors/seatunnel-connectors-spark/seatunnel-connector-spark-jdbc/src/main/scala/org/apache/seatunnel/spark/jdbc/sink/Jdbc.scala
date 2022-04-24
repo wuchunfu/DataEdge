@@ -28,6 +28,8 @@ import scala.collection.JavaConversions._
 
 class Jdbc extends SparkBatchSink {
 
+  override def getPluginName: String = "Jdbc"
+
   override def output(data: Dataset[Row], env: SparkEnvironment): Unit = {
     val saveMode = config.getString("saveMode")
     if ("update".equals(saveMode)) {

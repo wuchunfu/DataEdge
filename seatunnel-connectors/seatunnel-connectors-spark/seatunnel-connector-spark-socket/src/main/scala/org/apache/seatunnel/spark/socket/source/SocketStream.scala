@@ -29,6 +29,8 @@ import scala.collection.JavaConversions._
 
 class SocketStream extends SparkStreamingSource[String] {
 
+  override def getPluginName: String = "SocketStream"
+
   override def prepare(env: SparkEnvironment): Unit = {
     val defaultConfig = new JSONObject()
     defaultConfig.put("host", "localhost")

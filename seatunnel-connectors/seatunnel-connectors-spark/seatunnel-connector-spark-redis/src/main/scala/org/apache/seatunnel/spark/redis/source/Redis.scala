@@ -22,6 +22,7 @@ import com.redislabs.provider.redis.{RedisConfig, RedisEndpoint, toRedisContext}
 import org.apache.seatunnel.common.config.{CheckConfigUtil, CheckResult}
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSource
+import org.apache.seatunnel.spark.redis.common.Constants.{AUTH, DATA_TYPE, DB_NUM, DEFAULT_AUTH, DEFAULT_DATA_TYPE, DEFAULT_DB_NUM, DEFAULT_HOST, DEFAULT_PARTITION_NUM, DEFAULT_PORT, DEFAULT_TIMEOUT, HOST, KEYS_OR_KEY_PATTERN, PARTITION_NUM, PORT, TIMEOUT}
 import org.apache.seatunnel.spark.redis.common.RedisDataType
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
@@ -32,6 +33,8 @@ import scala.collection.JavaConversions._
 class Redis extends SparkBatchSource {
 
   var redisDataType: RedisDataType.Value = _
+
+  override def getPluginName: String = "Redis"
 
   override def checkConfig(): CheckResult = {
     CheckConfigUtil.checkAllExists(config, HOST, KEYS_OR_KEY_PATTERN)

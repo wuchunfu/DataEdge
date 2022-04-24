@@ -30,6 +30,8 @@ import scala.collection.JavaConversions._
 
 class Split extends BaseSparkTransform {
 
+  override def getPluginName: String = "Split"
+
   override def process(df: Dataset[Row], env: SparkEnvironment): Dataset[Row] = {
     val keys: JSONArray = config.getJSONArray("fields")
     val srcField: String = config.getString("source_field")

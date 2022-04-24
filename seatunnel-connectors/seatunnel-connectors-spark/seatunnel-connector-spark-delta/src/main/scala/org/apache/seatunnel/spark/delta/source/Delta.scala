@@ -27,6 +27,8 @@ import scala.collection.JavaConversions._
 
 class Delta extends SparkBatchSource {
 
+  override def getPluginName: String = "Delta"
+
   override def prepare(env: SparkEnvironment): Unit = {}
 
   override def checkConfig(): CheckResult = {

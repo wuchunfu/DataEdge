@@ -27,6 +27,8 @@ import scala.util.{Failure, Success, Try}
 
 class Jdbc extends SparkBatchSource {
 
+  override def getPluginName: String = "Jdbc"
+
   override def getData(env: SparkEnvironment): Dataset[Row] = {
     jdbcReader(env.getSparkSession, config.getString("driver")).load()
   }

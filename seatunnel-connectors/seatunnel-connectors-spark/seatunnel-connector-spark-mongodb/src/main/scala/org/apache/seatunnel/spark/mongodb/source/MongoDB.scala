@@ -36,6 +36,8 @@ class MongoDB extends SparkBatchSource {
 
   var schema = new StructType()
 
+  override def getPluginName: String = "MongoDB"
+
   override def prepare(env: SparkEnvironment): Unit = {
     val map = new collection.mutable.HashMap[String, String]
 

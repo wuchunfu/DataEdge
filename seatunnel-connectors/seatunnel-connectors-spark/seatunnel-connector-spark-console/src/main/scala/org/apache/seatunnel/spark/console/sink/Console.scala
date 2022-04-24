@@ -26,6 +26,8 @@ import org.apache.spark.sql.{Dataset, Row}
 
 class Console extends SparkBatchSink {
 
+  override def getPluginName: String = "Console"
+
   override def output(df: Dataset[Row], env: SparkEnvironment): Unit = {
     val limit = config.getIntValue(LIMIT)
 

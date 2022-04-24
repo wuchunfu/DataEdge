@@ -29,6 +29,8 @@ import scala.collection.JavaConversions._
 
 class Delta extends SparkBatchSink {
 
+  override def getPluginName: String = "Delta"
+
   override def checkConfig(): CheckResult = {
     checkAllExists(config, "delta.sink.path")
   }

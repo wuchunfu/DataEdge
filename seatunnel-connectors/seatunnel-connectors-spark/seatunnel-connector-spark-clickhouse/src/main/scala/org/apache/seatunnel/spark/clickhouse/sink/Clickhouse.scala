@@ -441,6 +441,9 @@ class Clickhouse extends SparkBatchSink {
         throw e
     }
   }
+
+  override def getPluginName: String = "Clickhouse"
+
 }
 
 object Clickhouse {
