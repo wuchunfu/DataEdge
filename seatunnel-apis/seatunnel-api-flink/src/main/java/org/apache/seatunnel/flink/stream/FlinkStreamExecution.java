@@ -77,7 +77,7 @@ public class FlinkStreamExecution implements Execution<FlinkStreamSource, FlinkS
         }
     }
 
-    private void registerResultTable(Plugin plugin, DataStream dataStream) {
+    private void registerResultTable(Plugin<FlinkEnvironment> plugin, DataStream<Row> dataStream) {
         JSONObject config = plugin.getConfig();
         if (config.containsKey(RESULT_TABLE_NAME)) {
             String name = config.getString(RESULT_TABLE_NAME);
