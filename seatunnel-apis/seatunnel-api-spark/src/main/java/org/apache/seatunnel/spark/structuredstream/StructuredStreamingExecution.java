@@ -21,8 +21,11 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.seatunnel.env.Execution;
 import org.apache.seatunnel.spark.BaseSparkTransform;
 import org.apache.seatunnel.spark.SparkEnvironment;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StructuredStreamingExecution implements Execution<StructuredStreamingSource, BaseSparkTransform, StructuredStreamingSink, SparkEnvironment> {
 
@@ -35,8 +38,25 @@ public class StructuredStreamingExecution implements Execution<StructuredStreami
     }
 
     @Override
-    public void start(List<StructuredStreamingSource> sources, List<BaseSparkTransform> transforms, List<StructuredStreamingSink> sinks) {
+    public void start(List<StructuredStreamingSource> sources,
+                      List<BaseSparkTransform> transforms,
+                      List<StructuredStreamingSink> sinks) throws Exception {
 
+        List<Dataset<Row>> datasetList = sources.stream()
+                .map(s -> SparkEnvironment.registerInputTempView(s, sparkEnvironment))
+                .collect(Collectors.toList());
+        if (datasetList.size() > 0) {
+            Dataset<Row> ds = datasetList.get(0);
+            for (BaseSparkTransform tf : transforms) {
+                ds = SparkEnvironment.transformProcess(sparkEnvironment, tf, ds);
+                SparkEnvironment.registerTransformTempView(tf, ds);
+            }
+
+            for (StructuredStreamingSink sink : sinks) {
+                SparkEnvironment.sinkProcess(sparkEnvironment, sink, ds).start();
+            }
+            sparkEnvironment.getSparkSession().streams().awaitAnyTermination();
+        }
     }
 
     @Override

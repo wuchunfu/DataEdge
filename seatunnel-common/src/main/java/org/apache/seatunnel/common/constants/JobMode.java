@@ -15,25 +15,8 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.env;
+package org.apache.seatunnel.common.constants;
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.common.config.CheckResult;
-import org.apache.seatunnel.common.constants.JobMode;
-
-/**
- * engine related runtime environment
- */
-public interface RuntimeEnv {
-
-    RuntimeEnv setConfig(JSONObject config);
-
-    JSONObject getConfig();
-
-    CheckResult checkConfig();
-
-    RuntimeEnv prepare();
-
-    RuntimeEnv setJobMode(JobMode mode);
-
+public enum JobMode {
+    BATCH, STREAMING, STRUCTURED_STREAMING
 }

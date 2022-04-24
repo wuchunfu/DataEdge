@@ -24,6 +24,7 @@ import org.apache.seatunnel.apis.BaseSink;
 import org.apache.seatunnel.apis.BaseSource;
 import org.apache.seatunnel.apis.BaseTransform;
 import org.apache.seatunnel.common.config.ConfigRuntimeException;
+import org.apache.seatunnel.common.constants.JobMode;
 import org.apache.seatunnel.env.Execution;
 import org.apache.seatunnel.env.RuntimeEnv;
 import org.apache.seatunnel.flink.FlinkEnvironment;
@@ -33,6 +34,7 @@ import org.apache.seatunnel.plugin.Plugin;
 import org.apache.seatunnel.spark.SparkEnvironment;
 import org.apache.seatunnel.spark.batch.SparkBatchExecution;
 import org.apache.seatunnel.spark.stream.SparkStreamingExecution;
+import org.apache.seatunnel.spark.structuredstream.StructuredStreamingExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +61,7 @@ public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
     private final EngineType engine;
     private final ConfigPackage configPackage;
     private final JSONObject config;
-    private boolean streaming;
+    private JobMode jobMode;
     private JSONObject envConfig;
     private boolean enableHive;
     private final ENVIRONMENT env;
@@ -124,9 +126,17 @@ public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
         return env;
     }
 
-    private boolean checkIsStreaming() {
-        JSONArray sourceConfigList = config.getJSONArray(PluginType.SOURCE.getType());
-        return sourceConfigList.getJSONObject(0).getString(PLUGIN_NAME_KEY).toLowerCase().endsWith("stream");
+    private void setJobMode(JSONObject envConfig) {
+        if (envConfig.containsKey("job.mode")) {
+            String mode = envConfig.getString("job.mode");
+            jobMode = JobMode.valueOf(mode.toUpperCase());
+        } else {
+            //Compatible with previous logic
+            List<JSONObject> sourceConfigList = new ArrayList<>();
+            JSONArray jsonArray = config.getJSONArray(PluginType.SOURCE.getType());
+            jsonArray.forEach(str -> sourceConfigList.add(JSONObject.parseObject(str.toString())));
+            jobMode = sourceConfigList.get(0).getString(PLUGIN_NAME_KEY).toLowerCase().endsWith("stream") ? JobMode.STREAMING : JobMode.BATCH;
+        }
     }
 
     private boolean checkIsContainHive() {
@@ -225,7 +235,6 @@ public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
 
     private ENVIRONMENT createEnv() {
         envConfig = config.getJSONObject("env");
-        streaming = checkIsStreaming();
         enableHive = checkIsContainHive();
         ENVIRONMENT env = null;
         switch (engine) {
@@ -238,7 +247,8 @@ public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
             default:
                 break;
         }
-        env.setConfig(envConfig).prepare();
+        setJobMode(envConfig);
+        env.setConfig(envConfig).setJobMode(jobMode).prepare();
         return env;
     }
 
@@ -247,23 +257,26 @@ public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
         switch (engine) {
             case SPARK:
                 SparkEnvironment sparkEnvironment = (SparkEnvironment) env;
-                if (streaming) {
+                if (JobMode.STREAMING.equals(jobMode)) {
                     execution = new SparkStreamingExecution(sparkEnvironment);
+                } else if (JobMode.STRUCTURED_STREAMING.equals(jobMode)) {
+                    execution = new StructuredStreamingExecution(sparkEnvironment);
                 } else {
                     execution = new SparkBatchExecution(sparkEnvironment);
                 }
                 break;
             case FLINK:
                 FlinkEnvironment flinkEnvironment = (FlinkEnvironment) env;
-                if (streaming) {
+                if (JobMode.STREAMING.equals(jobMode)) {
                     execution = new FlinkStreamExecution(flinkEnvironment);
                 } else {
                     execution = new FlinkBatchExecution(flinkEnvironment);
                 }
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("No suitable engine");
         }
+        LOGGER.info("current execution is [{}]", execution.getClass().getName());
         return (Execution<BaseSource<ENVIRONMENT>, BaseTransform<ENVIRONMENT>, BaseSink<ENVIRONMENT>, ENVIRONMENT>) execution;
     }
 }

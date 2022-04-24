@@ -33,6 +33,7 @@ import org.apache.flink.table.api.bridge.java.BatchTableEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.util.TernaryBoolean;
 import org.apache.seatunnel.common.config.CheckResult;
+import org.apache.seatunnel.common.constants.JobMode;
 import org.apache.seatunnel.env.RuntimeEnv;
 import org.apache.seatunnel.flink.util.ConfigKeyName;
 import org.apache.seatunnel.flink.util.EnvironmentUtil;
@@ -53,7 +54,7 @@ public class FlinkEnvironment implements RuntimeEnv {
 
     private BatchTableEnvironment batchTableEnvironment;
 
-    private boolean isStreaming;
+    private JobMode jobMode;
 
     private String jobName = "seatunnel";
 
@@ -75,7 +76,7 @@ public class FlinkEnvironment implements RuntimeEnv {
 
     @Override
     public FlinkEnvironment prepare() {
-        if (isStreaming) {
+        if (isStreaming()) {
             createStreamEnvironment();
             createStreamTableEnvironment();
         } else {
@@ -93,11 +94,11 @@ public class FlinkEnvironment implements RuntimeEnv {
     }
 
     public boolean isStreaming() {
-        return isStreaming;
+        return JobMode.STREAMING.equals(jobMode);
     }
 
-    public FlinkEnvironment setStreaming(boolean isStreaming) {
-        this.isStreaming = isStreaming;
+    public FlinkEnvironment setJobMode(JobMode jobMode) {
+        this.jobMode = jobMode;
         return this;
     }
 
@@ -244,7 +245,6 @@ public class FlinkEnvironment implements RuntimeEnv {
                     checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.DELETE_ON_CANCELLATION);
                 } else {
                     checkpointConfig.enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
-
                 }
             }
 
