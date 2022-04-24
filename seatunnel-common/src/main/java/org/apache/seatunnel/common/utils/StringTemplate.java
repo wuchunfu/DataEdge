@@ -25,27 +25,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * please using {@link VariablesSubstitute} instead, since 2.0.5
+ */
+@Deprecated
 public final class StringTemplate {
 
     private StringTemplate() {
     }
 
-    /**
-     * @param str        raw string
-     * @param timeFormat example : "yyyy-MM-dd HH:mm:ss"
-     * @return replaced string
-     */
     public static String substitute(String str, String timeFormat) {
-
-        final SimpleDateFormat sdf = new SimpleDateFormat(timeFormat);
-        final String formattedDate = sdf.format(new Date());
-
-        final Map<String, String> valuesMap = new HashMap<>(3);
-        valuesMap.put("uuid", UUID.randomUUID().toString());
-        valuesMap.put("now", formattedDate);
-        valuesMap.put(timeFormat, formattedDate);
-        final StrSubstitutor sub = new StrSubstitutor(valuesMap);
-        return sub.replace(str);
+        return VariablesSubstitute.substitute(str, timeFormat);
     }
 }
 
