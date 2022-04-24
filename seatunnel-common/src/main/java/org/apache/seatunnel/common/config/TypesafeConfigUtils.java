@@ -96,6 +96,9 @@ public final class TypesafeConfigUtils {
         if (defaultValue.getClass().equals(String.class)) {
             return config.containsKey(configKey) ? (T) config.getString(configKey) : defaultValue;
         }
+        if (defaultValue.getClass().equals(Boolean.class)) {
+            return config.containsKey(configKey) ? (T) Boolean.valueOf(config.getString(configKey)) : defaultValue;
+        }
         throw new RuntimeException("Unsupported config type, configKey: " + configKey);
     }
 }
