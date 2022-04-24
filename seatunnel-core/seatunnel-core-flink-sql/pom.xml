@@ -65,4 +65,8 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+    </build>
 </project>
