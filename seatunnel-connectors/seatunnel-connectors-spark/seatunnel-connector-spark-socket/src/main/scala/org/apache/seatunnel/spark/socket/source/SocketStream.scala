@@ -19,6 +19,7 @@ package org.apache.seatunnel.spark.socket.source
 
 import com.alibaba.fastjson.JSONObject
 import org.apache.seatunnel.spark.SparkEnvironment
+import org.apache.seatunnel.spark.socket.Config.{DEFAULT_HOST, DEFAULT_PORT, HOST, PORT}
 import org.apache.seatunnel.spark.stream.SparkStreamingSource
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types.{DataTypes, StructField, StructType}
@@ -33,8 +34,8 @@ class SocketStream extends SparkStreamingSource[String] {
 
   override def prepare(env: SparkEnvironment): Unit = {
     val defaultConfig = new JSONObject()
-    defaultConfig.put("host", "localhost")
-    defaultConfig.put("port", 9999)
+    defaultConfig.put(HOST, DEFAULT_HOST)
+    defaultConfig.put(PORT, DEFAULT_PORT)
     config = mergeConfig(config, defaultConfig)
   }
 
@@ -46,7 +47,7 @@ class SocketStream extends SparkStreamingSource[String] {
   }
 
   override def getData(env: SparkEnvironment): DStream[String] = {
-    env.getStreamingContext.socketTextStream(config.getString("host"), config.getIntValue("port"))
+    env.getStreamingContext.socketTextStream(config.getString(HOST), config.getIntValue("port"))
   }
 
   override def rdd2dataset(sparkSession: SparkSession, rdd: RDD[String]): Dataset[Row] = {
