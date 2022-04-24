@@ -27,6 +27,6 @@ import org.apache.seatunnel.flink.FlinkEnvironment;
  */
 public interface FlinkBatchTransform extends BaseFlinkTransform {
 
-    DataSet<Row> processBatch(FlinkEnvironment env, DataSet<Row> data);
+    DataSet<Row> processBatch(FlinkEnvironment env, DataSet<Row> data) throws Exception;
 
 }

@@ -27,6 +27,6 @@ import org.apache.seatunnel.flink.FlinkEnvironment;
  */
 public interface FlinkStreamTransform extends BaseFlinkTransform {
 
-    DataStream<Row> processStream(FlinkEnvironment env, DataStream<Row> dataStream);
+    DataStream<Row> processStream(FlinkEnvironment env, DataStream<Row> dataStream) throws Exception;
 
 }
