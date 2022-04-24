@@ -17,7 +17,6 @@
 package org.apache.seatunnel.spark.stream
 
 import com.alibaba.fastjson.JSONObject
-import org.apache.seatunnel.common.config.CheckResult
 import org.apache.seatunnel.env.Execution
 import org.apache.seatunnel.plugin.Plugin
 import org.apache.seatunnel.spark.batch.SparkBatchExecution
@@ -75,7 +74,4 @@ class SparkStreamingExecution(sparkEnvironment: SparkEnvironment)
 
   override def getConfig: JSONObject = config
 
-  override def checkConfig(): CheckResult = CheckResult.success()
-
-  override def prepare(void: SparkEnvironment): Unit = {}
 }

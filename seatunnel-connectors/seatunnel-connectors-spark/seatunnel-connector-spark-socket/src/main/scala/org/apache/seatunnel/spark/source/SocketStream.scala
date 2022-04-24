@@ -18,7 +18,6 @@
 package org.apache.seatunnel.spark.source
 
 import com.alibaba.fastjson.JSONObject
-import org.apache.seatunnel.common.config.CheckResult
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.stream.SparkStreamingSource
 import org.apache.spark.rdd.RDD
@@ -46,10 +45,6 @@ class SocketStream extends SparkStreamingSource[String] {
 
   override def getData(env: SparkEnvironment): DStream[String] = {
     env.getStreamingContext.socketTextStream(config.getString("host"), config.getIntValue("port"))
-  }
-
-  override def checkConfig(): CheckResult = {
-    CheckResult.success()
   }
 
   override def rdd2dataset(sparkSession: SparkSession, rdd: RDD[String]): Dataset[Row] = {

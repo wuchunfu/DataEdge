@@ -29,8 +29,6 @@ class Hudi extends SparkBatchSource {
 
   val readPath = "hoodie.datasource.read.paths"
 
-  override def prepare(env: SparkEnvironment): Unit = {}
-
   override def checkConfig(): CheckResult = {
     checkAllExists(config, readPath)
   }
