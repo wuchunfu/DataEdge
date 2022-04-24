@@ -18,18 +18,14 @@
 package org.apache.seatunnel.flink.batch;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.operators.DataSink;
 import org.apache.flink.types.Row;
 import org.apache.seatunnel.flink.BaseFlinkSink;
 import org.apache.seatunnel.flink.FlinkEnvironment;
-
-import javax.annotation.Nullable;
 
 /**
  * a FlinkBatchSink plugin will write data to other system using Flink DataSet API.
  */
 public interface FlinkBatchSink extends BaseFlinkSink {
 
-    @Nullable
-    DataSink<Row> outputBatch(FlinkEnvironment env, DataSet<Row> inDataSet);
+    void outputBatch(FlinkEnvironment env, DataSet<Row> inDataSet);
 }
