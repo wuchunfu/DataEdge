@@ -103,6 +103,11 @@ public class FlinkEnvironment implements RuntimeEnv {
         return this;
     }
 
+    @Override
+    public JobMode getJobMode() {
+        return jobMode;
+    }
+
     public StreamExecutionEnvironment getStreamExecutionEnvironment() {
         return environment;
     }

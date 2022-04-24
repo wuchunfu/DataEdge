@@ -15,26 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.env;
+package org.apache.seatunnel.spark.redis.common
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.common.config.CheckResult;
-import org.apache.seatunnel.common.constants.JobMode;
+object RedisDataType extends Enumeration {
+  def RedisDataType: Value = Value
 
-/**
- * engine related runtime environment
- */
-public interface RuntimeEnv {
-
-    RuntimeEnv setConfig(JSONObject config);
-
-    JSONObject getConfig();
-
-    CheckResult checkConfig();
-
-    RuntimeEnv prepare();
-
-    RuntimeEnv setJobMode(JobMode mode);
-
-    JobMode getJobMode();
+  val KV: Value = Value("KV")
+  val HASH: Value = Value("HASH")
+  val LIST: Value = Value("LIST")
+  val SET: Value = Value("SET")
+  val ZSET: Value = Value("ZSET")
 }

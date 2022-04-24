@@ -15,26 +15,30 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.env;
+package org.apache.seatunnel.spark.hudi.source
 
-import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.common.config.CheckResult;
-import org.apache.seatunnel.common.constants.JobMode;
+import org.apache.seatunnel.common.config.CheckConfigUtil.checkAllExists
+import org.apache.seatunnel.common.config.CheckResult
+import org.apache.seatunnel.spark.SparkEnvironment
+import org.apache.seatunnel.spark.batch.SparkBatchSource
+import org.apache.spark.sql.{Dataset, Row}
 
-/**
- * engine related runtime environment
- */
-public interface RuntimeEnv {
+import scala.collection.JavaConversions._
 
-    RuntimeEnv setConfig(JSONObject config);
+class Hudi extends SparkBatchSource {
 
-    JSONObject getConfig();
+  val readPath = "hoodie.datasource.read.paths"
 
-    CheckResult checkConfig();
+  override def checkConfig(): CheckResult = {
+    checkAllExists(config, readPath)
+  }
 
-    RuntimeEnv prepare();
+  override def getData(env: SparkEnvironment): Dataset[Row] = {
+    val reader = env.getSparkSession.read.format("hudi")
+    for (e <- config.entrySet()) {
+      reader.option(e.getKey, String.valueOf(e.getValue))
+    }
 
-    RuntimeEnv setJobMode(JobMode mode);
-
-    JobMode getJobMode();
+    reader.load(config.getString(readPath))
+  }
 }

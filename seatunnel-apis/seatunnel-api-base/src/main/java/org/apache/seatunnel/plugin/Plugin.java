@@ -65,6 +65,7 @@ public interface Plugin<T extends RuntimeEnv> extends Serializable, AutoCloseabl
      *
      * @throws Exception when close failed.
      */
+    @Override
     default void close() throws Exception {
 
     }

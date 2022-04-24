@@ -14,27 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.apache.seatunnel.env;
-
-import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.common.config.CheckResult;
-import org.apache.seatunnel.common.constants.JobMode;
+package org.apache.seatunnel.spark.console
 
 /**
- * engine related runtime environment
+ * Console configuration parameters and defaults
  */
-public interface RuntimeEnv {
+object Config {
 
-    RuntimeEnv setConfig(JSONObject config);
+  /**
+   * The nubmer of rows to show
+   */
+  val LIMIT = "limit"
 
-    JSONObject getConfig();
+  /**
+   * The serializer (plain/json/schema)
+   */
+  val SERIALIZER = "serializer"
 
-    CheckResult checkConfig();
+  /**
+   * Default console show output
+   */
+  val PLAIN = "plain"
 
-    RuntimeEnv prepare();
+  /**
+   * Convert dataframe to json and print
+   */
+  val JSON = "json"
 
-    RuntimeEnv setJobMode(JobMode mode);
+  /**
+   * Print the schema
+   */
+  val SCHEMA = "schema"
 
-    JobMode getJobMode();
+  /**
+   * Default serializer
+   */
+  val DEFAULT_SERIALIZER = PLAIN
+
+  /**
+   * Default number of rows
+   */
+  val DEFAULT_LIMIT = 100
+
 }

@@ -52,6 +52,11 @@ public class SparkEnvironment implements RuntimeEnv {
         return this;
     }
 
+    @Override
+    public JobMode getJobMode() {
+        return jobMode;
+    }
+
     public SparkEnvironment setEnableHive(boolean enableHive) {
         this.enableHive = enableHive;
         return this;
