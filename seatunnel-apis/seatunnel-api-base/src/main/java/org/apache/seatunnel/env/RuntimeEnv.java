@@ -17,11 +17,19 @@
 
 package org.apache.seatunnel.env;
 
-import org.apache.seatunnel.plugin.Plugin;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.seatunnel.common.config.CheckResult;
 
 /**
  * engine related runtime environment
  */
-public interface RuntimeEnv extends Plugin<Boolean> {
+public interface RuntimeEnv {
 
+    RuntimeEnv setConfig(JSONObject config);
+
+    JSONObject getConfig();
+
+    CheckResult checkConfig();
+
+    RuntimeEnv prepare();
 }

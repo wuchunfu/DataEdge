@@ -25,7 +25,7 @@ import org.apache.seatunnel.spark.SparkEnvironment;
 
 import java.util.List;
 
-public class StructuredStreamingExecution implements Execution<StructuredStreamingSource, BaseSparkTransform, StructuredStreamingSink> {
+public class StructuredStreamingExecution implements Execution<StructuredStreamingSource, BaseSparkTransform, StructuredStreamingSink, SparkEnvironment> {
 
     private final SparkEnvironment sparkEnvironment;
 
@@ -56,7 +56,7 @@ public class StructuredStreamingExecution implements Execution<StructuredStreami
     }
 
     @Override
-    public void prepare(Void prepareEnv) {
+    public void prepare(SparkEnvironment prepareEnv) {
 
     }
 }

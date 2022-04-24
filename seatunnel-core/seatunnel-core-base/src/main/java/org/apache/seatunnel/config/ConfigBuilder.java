@@ -50,19 +50,19 @@ import java.util.Objects;
 import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 
-public class ConfigBuilder {
+public class ConfigBuilder<ENVIRONMENT extends RuntimeEnv> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigBuilder.class);
 
     private static final String PLUGIN_NAME_KEY = "plugin_name";
     private final String configFile;
     private final EngineType engine;
-    private ConfigPackage configPackage;
+    private final ConfigPackage configPackage;
     private final JSONObject config;
     private boolean streaming;
     private JSONObject envConfig;
     private boolean enableHive;
-    private final RuntimeEnv env;
+    private final ENVIRONMENT env;
 
     /**
      * 读取json文件，返回json串
@@ -120,7 +120,7 @@ public class ConfigBuilder {
         return envConfig;
     }
 
-    public RuntimeEnv getEnv() {
+    public ENVIRONMENT getEnv() {
         return env;
     }
 
@@ -150,7 +150,7 @@ public class ConfigBuilder {
     /**
      * create plugin class instance, ignore case.
      **/
-    private <T extends Plugin<?>> T createPluginInstanceIgnoreCase(String name, PluginType pluginType) throws Exception {
+    private <T extends Plugin<ENVIRONMENT>> T createPluginInstanceIgnoreCase(String name, PluginType pluginType) throws Exception {
         if (name.split("\\.").length != 1) {
             // canonical class name
             return (T) Class.forName(name).newInstance();
@@ -205,7 +205,7 @@ public class ConfigBuilder {
         this.createPlugins(PluginType.SINK);
     }
 
-    public <T extends Plugin<? extends RuntimeEnv>> List<T> createPlugins(PluginType type) {
+    public <T extends Plugin<ENVIRONMENT>> List<T> createPlugins(PluginType type) {
         Objects.requireNonNull(type, "PluginType can not be null when create plugins!");
         List<T> basePluginList = new ArrayList<>();
         JSONArray configList = config.getJSONArray(type.getType());
@@ -223,34 +223,27 @@ public class ConfigBuilder {
         return basePluginList;
     }
 
-    private RuntimeEnv createEnv() {
+    private ENVIRONMENT createEnv() {
         envConfig = config.getJSONObject("env");
         streaming = checkIsStreaming();
         enableHive = checkIsContainHive();
-        RuntimeEnv env = null;
+        ENVIRONMENT env = null;
         switch (engine) {
             case SPARK:
-                env = new SparkEnvironment().setEnableHive(enableHive);
+                env = (ENVIRONMENT) new SparkEnvironment().setEnableHive(enableHive);
                 break;
             case FLINK:
-                env = new FlinkEnvironment();
+                env = (ENVIRONMENT) new FlinkEnvironment();
                 break;
             default:
                 break;
         }
-        env.setConfig(envConfig);
-        env.prepare(streaming);
+        env.setConfig(envConfig).prepare();
         return env;
     }
 
-    public Execution<
-            ? extends BaseSource<? extends RuntimeEnv>,
-            ? extends BaseTransform<? extends RuntimeEnv>,
-            ? extends BaseSink<? extends RuntimeEnv>> createExecution() {
-        Execution<
-                ? extends BaseSource<? extends RuntimeEnv>,
-                ? extends BaseTransform<? extends RuntimeEnv>,
-                ? extends BaseSink<? extends RuntimeEnv>> execution = null;
+    public Execution<BaseSource<ENVIRONMENT>, BaseTransform<ENVIRONMENT>, BaseSink<ENVIRONMENT>, ENVIRONMENT> createExecution() {
+        Execution execution = null;
         switch (engine) {
             case SPARK:
                 SparkEnvironment sparkEnvironment = (SparkEnvironment) env;
@@ -271,6 +264,6 @@ public class ConfigBuilder {
             default:
                 break;
         }
-        return execution;
+        return (Execution<BaseSource<ENVIRONMENT>, BaseTransform<ENVIRONMENT>, BaseSink<ENVIRONMENT>, ENVIRONMENT>) execution;
     }
 }

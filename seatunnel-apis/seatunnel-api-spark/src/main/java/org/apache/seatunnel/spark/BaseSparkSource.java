@@ -23,7 +23,7 @@ import org.apache.seatunnel.apis.BaseSource;
 /**
  * a base interface indicates a source plugin running on Spark.
  */
-public abstract class BaseSparkSource<T> implements BaseSource<SparkEnvironment> {
+public abstract class BaseSparkSource<OUT> implements BaseSource<SparkEnvironment> {
 
     protected JSONObject config = new JSONObject();
 
@@ -37,5 +37,5 @@ public abstract class BaseSparkSource<T> implements BaseSource<SparkEnvironment>
         return this.config;
     }
 
-    public abstract T getData(SparkEnvironment env);
+    public abstract OUT getData(SparkEnvironment env);
 }

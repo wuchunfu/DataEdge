@@ -28,7 +28,7 @@ import java.util.{List => JList}
 import scala.collection.JavaConversions._
 
 class SparkStreamingExecution(sparkEnvironment: SparkEnvironment)
-  extends Execution[BaseSparkSource[_], BaseSparkTransform, BaseSparkSink[_]] {
+  extends Execution[BaseSparkSource[_], BaseSparkTransform, BaseSparkSink[_], SparkEnvironment] {
 
   private var config = new JSONObject()
 
@@ -79,5 +79,5 @@ class SparkStreamingExecution(sparkEnvironment: SparkEnvironment)
 
   override def checkConfig(): CheckResult = CheckResult.success()
 
-  override def prepare(void: Void): Unit = {}
+  override def prepare(void: SparkEnvironment): Unit = {}
 }
