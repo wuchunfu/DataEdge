@@ -39,4 +39,27 @@ public class SparkCommandArgsTest {
         Assert.assertEquals("yarn", sparkArgs.getMaster());
         Assert.assertEquals(Arrays.asList("city=shijiazhuang", "name=Tom"), sparkArgs.getVariables());
     }
+
+    @Test
+    public void testHelp() {
+        String[] args = {"-h"};
+        SparkCommandArgs sparkArgs = new SparkCommandArgs();
+        JCommander commander = JCommander.newBuilder()
+                .addObject(sparkArgs)
+                .build();
+        commander.parse(args);
+        if (sparkArgs.isHelp()) {
+            commander.usage();
+        }
+    }
+
+    @Test
+    public void testDashDash() {
+        String[] args = {"-c", "app.conf", "-e", "client", "-m", "yarn", "-i", "city=guojizhuang", "--"};
+        SparkCommandArgs sparkArgs = new SparkCommandArgs();
+        JCommander.newBuilder()
+                .addObject(sparkArgs)
+                .build()
+                .parse(args);
+    }
 }

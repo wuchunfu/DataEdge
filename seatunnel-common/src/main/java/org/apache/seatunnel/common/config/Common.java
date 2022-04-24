@@ -67,7 +67,7 @@ public class Common {
         if (MODE.equals(Optional.of(DeployMode.CLIENT.getName()))) {
             try {
                 String path = Common.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-                return Paths.get(path).getParent().getParent().getParent();
+                return Paths.get(path).getParent().getParent();
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -76,6 +76,14 @@ public class Common {
         } else {
             throw new IllegalStateException("MODE not support : " + MODE.orElse("null"));
         }
+    }
+
+    public static Path appLibDir() {
+        return appRootDir().resolve("lib");
+    }
+
+    public static Path pluginTarball() {
+        return appRootDir().resolve("plugins.tar.gz");
     }
 
     /**
