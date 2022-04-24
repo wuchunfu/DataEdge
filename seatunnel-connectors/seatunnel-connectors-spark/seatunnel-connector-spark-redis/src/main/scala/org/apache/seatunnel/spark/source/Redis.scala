@@ -73,7 +73,7 @@ class Redis extends SparkBatchSource {
     val redisConfigs = new RedisConfig(RedisEndpoint(
       host = config.getString(HOST),
       port = config.getIntValue(PORT),
-      auth = config.getString(AUTH),
+      auth = if (config.getString(AUTH) == "") null else config.getString(AUTH),
       dbNum = config.getIntValue(DB_NUM),
       timeout = config.getIntValue(TIMEOUT)
     ))

@@ -38,7 +38,7 @@ class Redis extends SparkBatchSink with Logging {
     val redisConfigs = new RedisConfig(RedisEndpoint(
       host = config.getString(HOST),
       port = config.getIntValue(PORT),
-      auth = config.getString(AUTH),
+      auth = if (config.getString(AUTH) == "") null else config.getString(AUTH),
       dbNum = config.getIntValue(DB_NUM),
       timeout = config.getIntValue(TIMEOUT)
     ))
@@ -58,8 +58,8 @@ class Redis extends SparkBatchSink with Logging {
   override def checkConfig(): CheckResult = {
     CheckConfigUtil.checkAllExists(config, HOST, PORT)
 
-    val dataType = config.getString(DATA_TYPE)
-    if (dataType != null) {
+    if (config.containsKey(DATA_TYPE)) {
+      val dataType = config.getString(DATA_TYPE)
       val dataTypeList = List("KV", "HASH", "SET", "ZSET", "LIST")
       val bool = dataTypeList.contains(dataType.toUpperCase)
       if (!bool) {
