@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -60,28 +61,28 @@ public final class CompressionUtils {
         LOGGER.info(String.format("Untaring %s to dir %s.", inputFile.getAbsolutePath(), outputDir.getAbsolutePath()));
 
         final List<File> untaredFiles = new LinkedList<>();
-        final InputStream is = new FileInputStream(inputFile);
-        final TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory().createArchiveInputStream("tar", is);
-        TarArchiveEntry entry = null;
-        while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
-            final File outputFile = new File(outputDir, entry.getName());
-            if (entry.isDirectory()) {
-                LOGGER.info(String.format("Attempting to write output directory %s.", outputFile.getAbsolutePath()));
-                if (!outputFile.exists()) {
-                    LOGGER.info(String.format("Attempting to create output directory %s.", outputFile.getAbsolutePath()));
-                    if (!outputFile.mkdirs()) {
-                        throw new IllegalStateException(String.format("Couldn't create directory %s.", outputFile.getAbsolutePath()));
+        try (final InputStream is = Files.newInputStream(inputFile.toPath());
+             final TarArchiveInputStream debInputStream = (TarArchiveInputStream) new ArchiveStreamFactory().createArchiveInputStream("tar", is)) {
+            TarArchiveEntry entry = null;
+            while ((entry = (TarArchiveEntry) debInputStream.getNextEntry()) != null) {
+                final File outputFile = new File(outputDir, entry.getName());
+                if (entry.isDirectory()) {
+                    LOGGER.info(String.format("Attempting to write output directory %s.", outputFile.getAbsolutePath()));
+                    if (!outputFile.exists()) {
+                        LOGGER.info(String.format("Attempting to create output directory %s.", outputFile.getAbsolutePath()));
+                        if (!outputFile.mkdirs()) {
+                            throw new IllegalStateException(String.format("Couldn't create directory %s.", outputFile.getAbsolutePath()));
+                        }
                     }
+                } else {
+                    LOGGER.info(String.format("Creating output file %s.", outputFile.getAbsolutePath()));
+                    final OutputStream outputFileStream = Files.newOutputStream(outputFile.toPath());
+                    IOUtils.copy(debInputStream, outputFileStream);
+                    outputFileStream.close();
                 }
-            } else {
-                LOGGER.info(String.format("Creating output file %s.", outputFile.getAbsolutePath()));
-                final OutputStream outputFileStream = new FileOutputStream(outputFile);
-                IOUtils.copy(debInputStream, outputFileStream);
-                outputFileStream.close();
+                untaredFiles.add(outputFile);
             }
-            untaredFiles.add(outputFile);
         }
-        debInputStream.close();
     }
 
     /**
