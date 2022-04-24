@@ -20,15 +20,25 @@ package org.apache.seatunnel.command;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.seatunnel.flink.FlinkEnvironment;
 import org.apache.seatunnel.plugin.Plugin;
-import org.junit.Assert;
+import org.apache.seatunnel.plugin.PluginClosedException;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 public class BaseTaskExecuteCommandTest {
 
     private static int CLOSE_TIMES = 0;
+
+    @Before
+    public void setUp() {
+        CLOSE_TIMES = 0;
+    }
 
     @Test
     public void testClose() {
@@ -39,15 +49,27 @@ public class BaseTaskExecuteCommandTest {
         pluginListB.add(new MockPlugin());
         pluginListB.add(new MockPlugin());
         MockTaskExecutorCommand mockTaskExecutorCommand = new MockTaskExecutorCommand();
+        mockTaskExecutorCommand.close(pluginListA, pluginListB);
+        assertEquals(Integer.parseInt("0"), CLOSE_TIMES);
+    }
+
+    @Test
+    public void testExceptionClose() {
+        List<MockExceptionPlugin> pluginListA = new ArrayList<>();
+        pluginListA.add(new MockExceptionPlugin());
+        pluginListA.add(new MockExceptionPlugin());
+        List<MockExceptionPlugin> pluginListB = new ArrayList<>();
+        pluginListB.add(new MockExceptionPlugin());
+        pluginListB.add(new MockExceptionPlugin());
+        MockTaskExecutorCommand mockTaskExecutorCommand = new MockTaskExecutorCommand();
         try {
             mockTaskExecutorCommand.close(pluginListA, pluginListB);
         } catch (Exception ex) {
             // just print into console
             ex.printStackTrace();
         }
-        Assert.assertEquals(Integer.parseInt("4"), CLOSE_TIMES);
-        Assert.assertThrows(RuntimeException.class, () -> mockTaskExecutorCommand.close(pluginListA));
-
+        assertEquals(Integer.parseInt("4"), CLOSE_TIMES);
+        assertThrows(PluginClosedException.class, () -> mockTaskExecutorCommand.close(pluginListA));
     }
 
     private static class MockPlugin implements Plugin<FlinkEnvironment> {
@@ -63,9 +85,28 @@ public class BaseTaskExecuteCommandTest {
 
         @Override
         public void close() {
-            CLOSE_TIMES++;
-            throw new RuntimeException("Test close with exception, closeTimes:" + CLOSE_TIMES);
+
         }
+
+    }
+
+    private static class MockExceptionPlugin implements Plugin<FlinkEnvironment> {
+
+        @Override
+        public void setConfig(JSONObject config) {
+        }
+
+        @Override
+        public JSONObject getConfig() {
+            return null;
+        }
+
+        @Override
+        public void close() {
+            CLOSE_TIMES++;
+            throw new PluginClosedException("Test close with exception, closeTimes:" + CLOSE_TIMES);
+        }
+
     }
 
     private static class MockTaskExecutorCommand extends BaseTaskExecuteCommand<FlinkCommandArgs, FlinkEnvironment> {
@@ -74,5 +115,6 @@ public class BaseTaskExecuteCommandTest {
         public void execute(FlinkCommandArgs commandArgs) {
 
         }
+
     }
 }
