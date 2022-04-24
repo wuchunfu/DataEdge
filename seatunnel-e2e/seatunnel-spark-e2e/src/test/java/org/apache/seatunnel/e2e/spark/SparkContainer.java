@@ -44,7 +44,7 @@ public abstract class SparkContainer {
     private static final Logger LOG = LoggerFactory.getLogger(SparkContainer.class);
 
     private static final String SPARK_DOCKER_IMAGE = "bitnami/spark:2.4.3";
-    public static final Network NETWORK = Network.newNetwork();
+    protected static final Network NETWORK = Network.newNetwork();
 
     protected GenericContainer<?> master;
     private static final String SEATUNNEL_SPARK_JAR = "seatunnel-core-spark.jar";

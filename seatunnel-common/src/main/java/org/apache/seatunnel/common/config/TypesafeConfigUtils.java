@@ -19,6 +19,7 @@ package org.apache.seatunnel.common.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -85,7 +86,7 @@ public final class TypesafeConfigUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T getConfig(final JSONObject config, final String configKey, final T defaultValue) {
+    public static <T> T getConfig(final JSONObject config, final String configKey, @NonNull final T defaultValue) {
         if (defaultValue.getClass().equals(Long.class)) {
             return config.containsKey(configKey) ? (T) Long.valueOf(config.getString(configKey)) : defaultValue;
         }
