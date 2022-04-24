@@ -15,29 +15,29 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.config.command;
+package org.apache.seatunnel.utils;
 
-import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 import org.apache.seatunnel.command.SparkCommandArgs;
-import org.apache.seatunnel.common.config.DeployMode;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-
-public class SparkCommandArgsTest {
+public class CommandLineUtilsTest {
 
     @Test
     public void testParseSparkArgs() {
-        String[] args = {"-c", "app.conf", "-e", "client", "-m", "yarn", "-i", "city=shijiazhuang", "-i", "name=Tom"};
-        SparkCommandArgs sparkArgs = new SparkCommandArgs();
-        JCommander.newBuilder()
-                .addObject(sparkArgs)
-                .build()
-                .parse(args);
-        Assert.assertEquals("app.conf", sparkArgs.getConfigFile());
-        Assert.assertEquals(DeployMode.CLIENT, sparkArgs.getDeployMode());
-        Assert.assertEquals("yarn", sparkArgs.getMaster());
-        Assert.assertEquals(Arrays.asList("city=shijiazhuang", "name=Tom"), sparkArgs.getVariables());
+        String[] args = {"-c", "app.conf", "-e", "cluster", "-m", "local[*]"};
+        SparkCommandArgs commandLineArgs = CommandLineUtils.parseSparkArgs(args);
+
+        Assert.assertEquals("app.conf", commandLineArgs.getConfigFile());
+        Assert.assertEquals("cluster", commandLineArgs.getDeployMode().getName());
     }
+
+    @Test
+    public void testParseSparkArgsException() {
+        String[] args = {"-c", "app.conf", "-e", "cluster2xxx", "-m", "local[*]"};
+        Assert.assertThrows(ParameterException.class, () -> CommandLineUtils.parseSparkArgs(args));
+    }
+
 }

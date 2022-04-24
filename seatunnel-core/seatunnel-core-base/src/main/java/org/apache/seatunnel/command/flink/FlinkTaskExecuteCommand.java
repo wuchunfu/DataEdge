@@ -36,7 +36,7 @@ public class FlinkTaskExecuteCommand extends BaseTaskExecuteCommand<FlinkCommand
 
     @Override
     public void execute(FlinkCommandArgs flinkCommandArgs) {
-        ConfigBuilder<FlinkEnvironment> configBuilder = new ConfigBuilder(flinkCommandArgs.getConfigFile(), flinkCommandArgs.getEngineType());
+        ConfigBuilder<FlinkEnvironment> configBuilder = new ConfigBuilder<>(flinkCommandArgs.getConfigFile(), flinkCommandArgs.getEngineType());
 
         List<BaseSource<FlinkEnvironment>> sources = configBuilder.createPlugins(PluginType.SOURCE);
         List<BaseTransform<FlinkEnvironment>> transforms = configBuilder.createPlugins(PluginType.TRANSFORM);
@@ -45,11 +45,12 @@ public class FlinkTaskExecuteCommand extends BaseTaskExecuteCommand<FlinkCommand
         Execution<BaseSource<FlinkEnvironment>, BaseTransform<FlinkEnvironment>, BaseSink<FlinkEnvironment>, FlinkEnvironment> execution = configBuilder.createExecution();
 
         baseCheckConfig(sources, transforms, sinks);
-        prepare(configBuilder.getEnv(), sources, transforms, sinks);
         showAsciiLogo();
 
         try {
+            prepare(configBuilder.getEnv(), sources, transforms, sinks);
             execution.start(sources, transforms, sinks);
+            close(sources, transforms, sinks);
         } catch (Exception e) {
             throw new RuntimeException("Execute Flink task error", e);
         }

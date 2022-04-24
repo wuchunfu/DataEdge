@@ -15,16 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.config.command;
+package org.apache.seatunnel.command;
 
-import org.apache.seatunnel.command.Command;
-import org.apache.seatunnel.command.CommandFactory;
-import org.apache.seatunnel.command.FlinkCommandArgs;
-import org.apache.seatunnel.command.SparkCommandArgs;
 import org.apache.seatunnel.command.flink.FlinkConfValidateCommand;
 import org.apache.seatunnel.command.flink.FlinkTaskExecuteCommand;
 import org.apache.seatunnel.command.spark.SparkConfValidateCommand;
 import org.apache.seatunnel.command.spark.SparkTaskExecuteCommand;
+
 import org.junit.Assert;
 import org.junit.Test;
 

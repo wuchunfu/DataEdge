@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-package org.apache.seatunnel.config.command;
+package org.apache.seatunnel.command;
 
 import com.beust.jcommander.JCommander;
-import org.apache.seatunnel.command.FlinkCommandArgs;
 import org.junit.Assert;
 import org.junit.Test;
 

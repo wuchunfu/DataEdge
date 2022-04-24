@@ -35,7 +35,7 @@ public class SparkTaskExecuteCommand extends BaseTaskExecuteCommand<SparkCommand
     public void execute(SparkCommandArgs sparkCommandArgs) {
         String confFile = sparkCommandArgs.getConfigFile();
 
-        ConfigBuilder<SparkEnvironment> configBuilder = new ConfigBuilder(confFile, sparkCommandArgs.getEngineType());
+        ConfigBuilder<SparkEnvironment> configBuilder = new ConfigBuilder<>(confFile, sparkCommandArgs.getEngineType());
 
         List<BaseSource<SparkEnvironment>> sources = configBuilder.createPlugins(PluginType.SOURCE);
         List<BaseTransform<SparkEnvironment>> transforms = configBuilder.createPlugins(PluginType.TRANSFORM);
@@ -44,11 +44,12 @@ public class SparkTaskExecuteCommand extends BaseTaskExecuteCommand<SparkCommand
         Execution<BaseSource<SparkEnvironment>, BaseTransform<SparkEnvironment>, BaseSink<SparkEnvironment>, SparkEnvironment> execution = configBuilder.createExecution();
 
         baseCheckConfig(sources, transforms, sinks);
-        prepare(configBuilder.getEnv(), sources, transforms, sinks);
         showAsciiLogo();
 
         try {
+            prepare(configBuilder.getEnv(), sources, transforms, sinks);
             execution.start(sources, transforms, sinks);
+            close(sources, transforms, sinks);
         } catch (Exception e) {
             throw new RuntimeException("Execute Spark task error", e);
         }
