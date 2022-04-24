@@ -97,6 +97,7 @@ public class FlinkEnvironment implements RuntimeEnv {
         return JobMode.STREAMING.equals(jobMode);
     }
 
+    @Override
     public FlinkEnvironment setJobMode(JobMode jobMode) {
         this.jobMode = jobMode;
         return this;
