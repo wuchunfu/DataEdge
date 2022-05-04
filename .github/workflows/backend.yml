@@ -108,7 +108,7 @@ jobs:
       - name: Build and Package
         shell: cmd
         run: |
-          .\mvnw.cmd -B install scalastyle:check -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dlicense.skipAddThirdParty=true -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -nsu
+          .\mvnw.cmd -B install -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dscalastyle.skip=true -Dlicense.skipAddThirdParty=true -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.http.retryHandler.count=3 -Dmaven.wagon.httpconnectionManager.ttlSeconds=120 -nsu
       - name: Run Unit tests
         shell: cmd
         run: |
