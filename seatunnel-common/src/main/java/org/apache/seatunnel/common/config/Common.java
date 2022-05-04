@@ -96,6 +96,27 @@ public class Common {
     }
 
     /**
+     * Plugin Root Dir
+     */
+    public static Path connectorRootDir(String engine) {
+        return Paths.get(appRootDir().toString(), "connectors", engine.toLowerCase());
+    }
+
+    /**
+     * Plugin Connector Jar Dir
+     */
+    public static Path connectorJarDir(String engine) {
+        return Paths.get(appRootDir().toString(), "connectors", engine.toLowerCase());
+    }
+
+    /**
+     * Plugin Connector Dir
+     */
+    public static Path connectorDir() {
+        return Paths.get(appRootDir().toString(), "connectors");
+    }
+
+    /**
      * Get specific plugin dir
      */
     public static Path pluginDir(String pluginName) {

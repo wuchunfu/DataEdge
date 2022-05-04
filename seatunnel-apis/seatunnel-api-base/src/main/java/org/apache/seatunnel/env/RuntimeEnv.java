@@ -21,6 +21,9 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.seatunnel.common.config.CheckResult;
 import org.apache.seatunnel.common.constants.JobMode;
 
+import java.net.URL;
+import java.util.List;
+
 /**
  * engine related runtime environment
  */
@@ -37,4 +40,7 @@ public interface RuntimeEnv {
     RuntimeEnv setJobMode(JobMode mode);
 
     JobMode getJobMode();
+
+    void registerPlugin(List<URL> pluginPaths);
+
 }

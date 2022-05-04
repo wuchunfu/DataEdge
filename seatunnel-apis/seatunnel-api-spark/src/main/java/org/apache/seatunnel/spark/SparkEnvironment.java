@@ -28,11 +28,18 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.streaming.Seconds;
 import org.apache.spark.streaming.StreamingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.List;
 
 import static org.apache.seatunnel.plugin.Plugin.RESULT_TABLE_NAME;
 import static org.apache.seatunnel.plugin.Plugin.SOURCE_TABLE_NAME;
 
 public class SparkEnvironment implements RuntimeEnv {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SparkEnvironment.class);
 
     private static final long DEFAULT_SPARK_STREAMING_DURATION = 5;
 
@@ -76,6 +83,14 @@ public class SparkEnvironment implements RuntimeEnv {
     @Override
     public CheckResult checkConfig() {
         return CheckResult.success();
+    }
+
+    @Override
+    public void registerPlugin(List<URL> pluginPaths) {
+        LOGGER.info("register plugins :" + pluginPaths);
+        // TODO we use --jar parameter to support submit multi-jar in spark cluster at now. Refactor it to
+        //  support submit multi-jar in code or remove this logic.
+        // this.sparkSession.conf().set("spark.jars",pluginPaths.stream().map(URL::getPath).collect(Collectors.joining(",")));
     }
 
     @Override

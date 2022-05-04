@@ -81,6 +81,12 @@
         <module>seatunnel-connectors</module>
         <module>seatunnel-transforms</module>
         <module>seatunnel-e2e</module>
+        <module>seatunnel-connectors/seatunnel-connectors-flink-list</module>
+        <module>seatunnel-connectors/seatunnel-connectors-flink-list/seatunnel-connectors-flink-list-current</module>
+        <module>seatunnel-connectors/seatunnel-connectors-flink-list/seatunnel-connectors-flink-list-previous</module>
+        <module>seatunnel-connectors/seatunnel-connectors-spark-list</module>
+        <module>seatunnel-connectors/seatunnel-connectors-spark-list/seatunnel-connectors-spark-list-current</module>
+        <module>seatunnel-connectors/seatunnel-connectors-spark-list/seatunnel-connectors-spark-list-previous</module>
     </modules>
 
     <properties>
