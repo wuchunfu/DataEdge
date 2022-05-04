@@ -87,6 +87,8 @@
         <module>seatunnel-connectors/seatunnel-connectors-spark-list</module>
         <module>seatunnel-connectors/seatunnel-connectors-spark-list/seatunnel-connectors-spark-list-current</module>
         <module>seatunnel-connectors/seatunnel-connectors-spark-list/seatunnel-connectors-spark-list-previous</module>
+        <module>seatunnel-connectors/seatunnel-connectors-flink-dist</module>
+        <module>seatunnel-connectors/seatunnel-connectors-spark-dist</module>
     </modules>
 
     <properties>
@@ -165,6 +167,7 @@
         <testcontainer.version>1.16.3</testcontainer.version>
         <skipUT>false</skipUT>
         <skipIT>true</skipIT>
+        <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
     <dependencyManagement>
