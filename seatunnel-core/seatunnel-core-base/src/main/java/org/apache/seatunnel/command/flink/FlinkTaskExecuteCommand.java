@@ -29,7 +29,9 @@ import org.apache.seatunnel.config.ExecutionContext;
 import org.apache.seatunnel.config.ExecutionFactory;
 import org.apache.seatunnel.env.Execution;
 import org.apache.seatunnel.flink.FlinkEnvironment;
+import org.apache.seatunnel.utils.FileUtils;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class FlinkTaskExecuteCommand extends BaseTaskExecuteCommand<FlinkCommand
     @Override
     public void execute(FlinkCommandArgs flinkCommandArgs) {
         EngineType engine = flinkCommandArgs.getEngineType();
-        String configFile = flinkCommandArgs.getConfigFile();
+        Path configFile = FileUtils.getConfigPath(flinkCommandArgs);
 
         JSONObject config = new ConfigBuilder<>(configFile, engine).getConfig();
         ExecutionContext<FlinkEnvironment> executionContext = new ExecutionContext<>(config, engine);
