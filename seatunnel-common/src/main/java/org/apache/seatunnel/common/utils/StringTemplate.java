@@ -17,14 +17,6 @@
 
 package org.apache.seatunnel.common.utils;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 /**
  * please using {@link VariablesSubstitute} instead, since 2.0.5
  */

@@ -22,10 +22,11 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
-import org.apache.seatunnel.env.Execution;
+import org.apache.seatunnel.apis.base.env.Execution;
+import org.apache.seatunnel.apis.base.plugin.Plugin;
 import org.apache.seatunnel.flink.FlinkEnvironment;
 import org.apache.seatunnel.flink.util.TableUtil;
-import org.apache.seatunnel.plugin.Plugin;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

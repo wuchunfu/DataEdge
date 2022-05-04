@@ -17,6 +17,7 @@
 
 package org.apache.seatunnel;
 
+import org.apache.seatunnel.core.flink.FlinkStarter;
 import org.junit.Assert;
 import org.junit.Test;
 

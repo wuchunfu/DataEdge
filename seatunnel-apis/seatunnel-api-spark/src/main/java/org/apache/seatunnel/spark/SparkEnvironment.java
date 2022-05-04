@@ -17,11 +17,14 @@
 
 package org.apache.seatunnel.spark;
 
+import static org.apache.seatunnel.apis.base.plugin.Plugin.RESULT_TABLE_NAME;
+import static org.apache.seatunnel.apis.base.plugin.Plugin.SOURCE_TABLE_NAME;
+
 import com.alibaba.fastjson.JSONObject;
+import org.apache.seatunnel.apis.base.env.RuntimeEnv;
 import org.apache.seatunnel.common.config.CheckResult;
 import org.apache.seatunnel.common.config.ConfigRuntimeException;
 import org.apache.seatunnel.common.constants.JobMode;
-import org.apache.seatunnel.env.RuntimeEnv;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -33,9 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.List;
-
-import static org.apache.seatunnel.plugin.Plugin.RESULT_TABLE_NAME;
-import static org.apache.seatunnel.plugin.Plugin.SOURCE_TABLE_NAME;
 
 public class SparkEnvironment implements RuntimeEnv {
 

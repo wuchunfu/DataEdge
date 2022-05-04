@@ -18,10 +18,7 @@
 package org.apache.seatunnel.spark.batch;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.common.config.ConfigRuntimeException;
-import org.apache.seatunnel.env.Execution;
-import org.apache.seatunnel.spark.BaseSparkSink;
-import org.apache.seatunnel.spark.BaseSparkSource;
+import org.apache.seatunnel.apis.base.env.Execution;
 import org.apache.seatunnel.spark.BaseSparkTransform;
 import org.apache.seatunnel.spark.SparkEnvironment;
 import org.apache.spark.sql.Dataset;

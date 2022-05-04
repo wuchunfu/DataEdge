@@ -18,7 +18,7 @@
 package org.apache.seatunnel.spark;
 
 import com.alibaba.fastjson.JSONObject;
-import org.apache.seatunnel.apis.BaseTransform;
+import org.apache.seatunnel.apis.base.api.BaseTransform;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 

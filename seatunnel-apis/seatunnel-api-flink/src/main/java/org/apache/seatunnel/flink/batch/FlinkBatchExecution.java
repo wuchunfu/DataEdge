@@ -23,7 +23,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.BatchTableEnvironment;
 import org.apache.flink.types.Row;
-import org.apache.seatunnel.env.Execution;
+import org.apache.seatunnel.apis.base.env.Execution;
 import org.apache.seatunnel.flink.FlinkEnvironment;
 import org.apache.seatunnel.flink.util.TableUtil;
 import org.slf4j.Logger;

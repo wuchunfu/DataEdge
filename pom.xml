@@ -130,7 +130,7 @@
         <spark-redis.version>2.6.0</spark-redis.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
-        <!--    <spark.scope>provided</spark.scope>-->
+<!--            <spark.scope>provided</spark.scope>-->
         <spark.scope>compile</spark.scope>
         <flink.scope>provided</flink.scope>
         <!--    <flink.scope>compile</flink.scope>-->

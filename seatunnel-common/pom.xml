@@ -30,12 +30,10 @@
     <artifactId>seatunnel-common</artifactId>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.apache.seatunnel</groupId>-->
-<!--            <artifactId>seatunnel-config</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--        </dependency>-->
-
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -50,7 +48,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

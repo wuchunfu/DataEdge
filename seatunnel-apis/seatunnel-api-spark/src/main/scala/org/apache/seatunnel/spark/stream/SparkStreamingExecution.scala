@@ -17,9 +17,8 @@
 package org.apache.seatunnel.spark.stream
 
 import com.alibaba.fastjson.JSONObject
-import org.apache.seatunnel.env.Execution
-import org.apache.seatunnel.plugin.Plugin
-import org.apache.seatunnel.spark.batch.SparkBatchExecution
+import org.apache.seatunnel.apis.base.env.Execution
+import org.apache.seatunnel.apis.base.plugin.Plugin
 import org.apache.seatunnel.spark.{BaseSparkSink, BaseSparkSource, BaseSparkTransform, SparkEnvironment}
 import org.apache.spark.sql.{Dataset, Row}
 
