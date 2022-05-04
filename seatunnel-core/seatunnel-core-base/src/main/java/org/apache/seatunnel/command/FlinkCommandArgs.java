@@ -17,10 +17,15 @@
 
 package org.apache.seatunnel.command;
 
+import com.beust.jcommander.Parameter;
 import org.apache.seatunnel.common.config.DeployMode;
 import org.apache.seatunnel.config.EngineType;
 
 public class FlinkCommandArgs extends AbstractCommandArgs {
+
+    @Parameter(names = {"-r", "--run-mode"}, description = "job run mode, run or run-application")
+    private String runMode = "run";
+
     @Override
     public EngineType getEngineType() {
         return EngineType.FLINK;
@@ -29,5 +34,13 @@ public class FlinkCommandArgs extends AbstractCommandArgs {
     @Override
     public DeployMode getDeployMode() {
         return DeployMode.CLIENT;
+    }
+
+    public String getRunMode() {
+        return runMode;
+    }
+
+    public void setRunMode(String runMode) {
+        this.runMode = runMode;
     }
 }
