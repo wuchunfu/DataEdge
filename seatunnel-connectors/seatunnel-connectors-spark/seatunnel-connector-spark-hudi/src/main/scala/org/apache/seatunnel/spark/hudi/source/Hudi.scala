@@ -21,18 +21,17 @@ import org.apache.seatunnel.common.config.CheckConfigUtil.checkAllExists
 import org.apache.seatunnel.common.config.CheckResult
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSource
+import org.apache.seatunnel.spark.hudi.Config.HOODIE_DATASTORE_READ_PATHS
 import org.apache.spark.sql.{Dataset, Row}
 
 import scala.collection.JavaConversions._
 
 class Hudi extends SparkBatchSource {
 
-  val readPath = "hoodie.datasource.read.paths"
-
   override def getPluginName: String = "Hudi"
 
   override def checkConfig(): CheckResult = {
-    checkAllExists(config, readPath)
+    checkAllExists(config, HOODIE_DATASTORE_READ_PATHS)
   }
 
   override def getData(env: SparkEnvironment): Dataset[Row] = {
@@ -41,6 +40,6 @@ class Hudi extends SparkBatchSource {
       reader.option(e.getKey, String.valueOf(e.getValue))
     }
 
-    reader.load(config.getString(readPath))
+    reader.load(config.getString(HOODIE_DATASTORE_READ_PATHS))
   }
 }

@@ -23,27 +23,25 @@ import org.apache.seatunnel.common.config.CheckResult
 import org.apache.seatunnel.common.config.TypesafeConfigUtils.mergeConfig
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSink
+import org.apache.seatunnel.spark.hudi.Config.{DEFAULT_SAVE_MODE, HOODIE_BASE_PATH, HOODIE_TABLE_NAME, SAVE_MODE}
 import org.apache.spark.sql.{Dataset, Row}
 
 import scala.collection.JavaConversions._
 
 class Hudi extends SparkBatchSink {
 
-  val writePath = "hoodie.base.path"
-  val tableName = "hoodie.table.name"
-  val saveMode = "save.mode"
   val recordKeyField = "hoodie.datasource.write.recordkey.field"
   val preCombineField = "hoodie.datasource.write.precombine.field"
 
   override def getPluginName: String = "Hudi"
 
   override def checkConfig(): CheckResult = {
-    checkAllExists(config, writePath, tableName)
+    checkAllExists(config, HOODIE_BASE_PATH, HOODIE_TABLE_NAME)
   }
 
   override def prepare(env: SparkEnvironment): Unit = {
     val defaultConfig = new JSONObject()
-    defaultConfig.put(saveMode, "append")
+    defaultConfig.put(SAVE_MODE, DEFAULT_SAVE_MODE)
     defaultConfig.put(recordKeyField, "uuid")
     defaultConfig.put(preCombineField, "ts")
     config = mergeConfig(config, defaultConfig)
@@ -58,7 +56,7 @@ class Hudi extends SparkBatchSink {
     //        writer.option(DataSourceWriteOptions.RECORDKEY_FIELD.key(), "id")
     //        writer.option(DataSourceWriteOptions.PARTITIONPATH_FIELD.key(), "address")
     writer
-      .mode(config.getString(saveMode))
-      .save(config.getString(writePath))
+      .mode(config.getString(SAVE_MODE))
+      .save(config.getString(HOODIE_BASE_PATH))
   }
 }
