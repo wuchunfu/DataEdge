@@ -16,11 +16,12 @@
  */
 package org.apache.seatunnel.spark.clickhouse.sink
 
+import com.alibaba.fastjson.JSONObject
 import net.jpountz.xxhash.{XXHash64, XXHashFactory}
 import org.apache.commons.lang3.StringUtils
 import org.apache.seatunnel.common.config.CheckConfigUtil.checkAllExists
 import org.apache.seatunnel.common.config.CheckResult
-import org.apache.seatunnel.common.config.TypesafeConfigUtils.{extractSubConfig, hasSubConfig}
+import org.apache.seatunnel.common.config.TypesafeConfigUtils.{extractSubConfig, hasSubConfig, mergeConfig}
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSink
 import org.apache.seatunnel.spark.clickhouse.Config.{BULK_SIZE, DATABASE, FIELDS, HOST, PASSWORD, RETRY, RETRY_CODES, SHARDING_KEY, SPLIT_MODE, TABLE, USERNAME}
@@ -158,7 +159,7 @@ class Clickhouse extends SparkBatchSink {
         }
       }
       if (this.config.containsKey(FIELDS)) {
-        this.fields = config.getStringList(FIELDS)
+        this.fields = config.getJSONArray(FIELDS).asInstanceOf[java.util.List[String]]
         checkResult = acceptedClickHouseSchema(this.fields.toList, this.tableSchema, this.table)
       }
     }
@@ -170,14 +171,13 @@ class Clickhouse extends SparkBatchSink {
       this.initSQL = initPrepareSQL()
     }
 
-    val defaultConfig = ConfigFactory.parseMap(
-      Map(
-        BULK_SIZE -> 20000,
-        // "retry_codes" -> util.Arrays.asList(ClickHouseErrorCode.NETWORK_ERROR.code),
-        RETRY_CODES -> util.Arrays.asList(),
-        RETRY -> 1))
-    config = config.withFallback(defaultConfig)
-    retryCodes = config.getIntList(RETRY_CODES)
+    val defaultConfig = new JSONObject()
+    defaultConfig.put(BULK_SIZE, 20000)
+    // "retry_codes" -> util.Arrays.asList(ClickHouseErrorCode.NETWORK_ERROR.code),
+    defaultConfig.put(RETRY_CODES, util.Arrays.asList())
+    defaultConfig.put(RETRY, 1)
+    config = mergeConfig(config, defaultConfig)
+    retryCodes = config.getJSONArray(RETRY_CODES).asInstanceOf[java.util.List[Integer]]
   }
 
   private def initPrepareSQL(): String = {
@@ -225,7 +225,15 @@ class Clickhouse extends SparkBatchSink {
             statement.setTimestamp(index + 1, Timestamp.valueOf(value.toString))
         }
       case "Int8" | "UInt8" | "Int16" | "UInt16" | "Int32" =>
-        statement.setInt(index + 1, item.getAs[Int](fieldIndex))
+        val value = item.get(fieldIndex)
+        value match {
+          case byte: Byte =>
+            statement.setByte(index + 1, byte.byteValue())
+          case short: Short =>
+            statement.setShort(index + 1, short.shortValue())
+          case _ =>
+            statement.setInt(index + 1, value.asInstanceOf[Int])
+        }
       case "UInt32" | "UInt64" | "Int64" =>
         statement.setLong(index + 1, item.getAs[Long](fieldIndex))
       case "Float32" =>
