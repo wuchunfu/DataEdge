@@ -24,10 +24,17 @@ import org.apache.seatunnel.core.base.command.AbstractCommandArgs;
 import org.apache.seatunnel.core.base.config.EngineType;
 import org.apache.seatunnel.core.flink.config.FlinkRunMode;
 
+import java.util.List;
+
 public class FlinkCommandArgs extends AbstractCommandArgs {
 
     @Parameter(names = {"-r", "--run-mode"}, converter = RunModeConverter.class, description = "job run mode, run or run-application")
     private FlinkRunMode runMode = FlinkRunMode.RUN;
+
+    /**
+     * Undefined parameters parsed will be stored here as flink command parameters.
+     */
+    private List<String> flinkParams;
 
     @Override
     public EngineType getEngineType() {
@@ -45,6 +52,14 @@ public class FlinkCommandArgs extends AbstractCommandArgs {
 
     public void setRunMode(FlinkRunMode runMode) {
         this.runMode = runMode;
+    }
+
+    public List<String> getFlinkParams() {
+        return flinkParams;
+    }
+
+    public void setFlinkParams(List<String> flinkParams) {
+        this.flinkParams = flinkParams;
     }
 
     /**
