@@ -28,7 +28,6 @@ import java.util.Map;
 import static org.apache.seatunnel.common.config.TypesafeConfigUtils.extractSubConfig;
 import static org.apache.seatunnel.common.config.TypesafeConfigUtils.extractSubConfigThrowable;
 import static org.apache.seatunnel.common.config.TypesafeConfigUtils.hasSubConfig;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 public class TypesafeConfigUtilsTest {
@@ -61,10 +60,10 @@ public class TypesafeConfigUtilsTest {
     @Test
     public void testExtractSubConfigThrowable() {
         JSONObject config = getConfig();
-        Throwable exception = assertThrows(ConfigRuntimeException.class, () -> {
+
+        assertThrows("config is empty", ConfigRuntimeException.class, () -> {
             extractSubConfigThrowable(config, "test1.", false);
         });
-        assertEquals("config is empty", exception.getMessage());
 
         JSONObject subConfig = extractSubConfigThrowable(config, "test.", false);
         Map<String, String> configMap = new HashMap<>();
