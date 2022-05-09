@@ -16,20 +16,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
+        <artifactId>seatunnel-e2e</artifactId>
         <groupId>org.apache.seatunnel</groupId>
-        <artifactId>DataEdge</artifactId>
         <version>${revision}</version>
     </parent>
-    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>seatunnel-e2e</artifactId>
+    <artifactId>seatunnel-flink-sql-e2e</artifactId>
 
-    <modules>
-        <module>seatunnel-flink-e2e</module>
-        <module>seatunnel-flink-sql-e2e</module>
-        <module>seatunnel-spark-e2e</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.seatunnel</groupId>
+            <artifactId>seatunnel-core-flink-sql</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
