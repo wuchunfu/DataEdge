@@ -21,11 +21,15 @@ import static org.apache.seatunnel.core.flink.constant.FlinkConstant.USAGE_EXIT_
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.UnixStyleUsageFormatter;
+import org.apache.seatunnel.core.base.config.ConfigParser;
 import org.apache.seatunnel.core.flink.args.FlinkCommandArgs;
 import org.apache.seatunnel.core.flink.config.FlinkJobType;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CommandLineUtils {
@@ -62,7 +66,7 @@ public class CommandLineUtils {
 
     }
 
-    public static List<String> buildFlinkCommand(FlinkCommandArgs flinkCommandArgs, String className, String jarPath) {
+    public static List<String> buildFlinkCommand(FlinkCommandArgs flinkCommandArgs, String className, String jarPath) throws FileNotFoundException {
         List<String> command = new ArrayList<>();
         command.add("${FLINK_HOME}/bin/flink");
         command.add(flinkCommandArgs.getRunMode().getMode());
@@ -80,6 +84,13 @@ public class CommandLineUtils {
                 .filter(Objects::nonNull)
                 .map(String::trim)
                 .forEach(variable -> command.add("-D" + variable));
+
+        ConfigParser.getConfigEnvValues(flinkCommandArgs.getConfigFile())
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .forEach(entry -> command.add("-D" + entry.getKey() + "=" + entry.getValue()));
+
         return command;
 
     }

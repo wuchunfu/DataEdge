@@ -17,29 +17,25 @@
 
 package org.apache.seatunnel.core.spark;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.UnixStyleUsageFormatter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.seatunnel.core.spark.args.SparkCommandArgs;
+import org.apache.seatunnel.apis.base.env.RuntimeEnv;
 import org.apache.seatunnel.common.Constants;
 import org.apache.seatunnel.common.config.Common;
 import org.apache.seatunnel.common.config.DeployMode;
+import org.apache.seatunnel.core.base.Starter;
 import org.apache.seatunnel.core.base.config.ConfigBuilder;
+import org.apache.seatunnel.core.base.config.ConfigParser;
 import org.apache.seatunnel.core.base.config.EngineType;
 import org.apache.seatunnel.core.base.config.PluginFactory;
-import org.apache.seatunnel.core.base.Starter;
-import org.apache.seatunnel.apis.base.env.RuntimeEnv;
 import org.apache.seatunnel.core.base.utils.CompressionUtils;
+import org.apache.seatunnel.core.spark.args.SparkCommandArgs;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -179,46 +175,10 @@ public class SparkStarter implements Starter {
     }
 
     /**
-     * 读取json文件，返回json串
-     *
-     * @param fileName
-     * @return
-     */
-    public static String readJsonFile(String fileName) {
-        String jsonStr = "";
-        try {
-            File jsonFile = new File(fileName);
-            if (!jsonFile.exists()) {
-                throw new FileNotFoundException("config file '" + jsonFile + "' does not exists!");
-            }
-            FileReader fileReader = new FileReader(jsonFile);
-
-            Reader reader = new InputStreamReader(Files.newInputStream(jsonFile.toPath()), StandardCharsets.UTF_8);
-            int ch = 0;
-            StringBuilder sb = new StringBuilder();
-            while ((ch = reader.read()) != -1) {
-                sb.append((char) ch);
-            }
-            fileReader.close();
-            reader.close();
-            jsonStr = sb.toString();
-            return jsonStr;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * Get spark configurations from SeaTunnel job config file.
      */
     static Map<String, String> getSparkConf(String configFile) throws FileNotFoundException {
-        String content = readJsonFile(configFile);
-        JSONObject appConfig = JSON.parseObject(content);
-        return appConfig.getJSONObject("env")
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().toString()));
+        return ConfigParser.getConfigEnvValues(configFile);
     }
 
     /**
