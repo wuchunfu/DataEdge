@@ -20,6 +20,7 @@ package org.apache.seatunnel.core.spark;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.UnixStyleUsageFormatter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.seatunnel.core.spark.args.SparkCommandArgs;
 import org.apache.seatunnel.common.Constants;
@@ -134,6 +135,7 @@ public class SparkStarter implements Starter {
                 .args(args)
                 .build();
         if (commandArgs.isHelp()) {
+            commander.setUsageFormatter(new UnixStyleUsageFormatter(commander));
             commander.usage();
             System.exit(USAGE_EXIT_CODE);
         }
