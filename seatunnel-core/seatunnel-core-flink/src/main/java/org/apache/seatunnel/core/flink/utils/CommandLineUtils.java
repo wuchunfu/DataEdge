@@ -57,7 +57,7 @@ public class CommandLineUtils {
 
     }
 
-    public static List<String> buildFlinkCommand(FlinkCommandArgs flinkCommandArgs, String className, String jarPath, FlinkJobType jobType) throws FileNotFoundException {
+    public static List<String> buildFlinkCommand(FlinkCommandArgs flinkCommandArgs, String className, String jarPath) {
         List<String> command = new ArrayList<>();
         command.add("${FLINK_HOME}/bin/flink");
         command.add(flinkCommandArgs.getRunMode().getMode());
@@ -70,21 +70,6 @@ public class CommandLineUtils {
         if (flinkCommandArgs.isCheckConfig()) {
             command.add("--check");
         }
-        // set System properties
-        flinkCommandArgs.getVariables().stream()
-                .filter(Objects::nonNull)
-                .map(String::trim)
-                .forEach(variable -> command.add("-D" + variable));
-
-        if (jobType.equals(FlinkJobType.JAR)) {
-            ConfigParser.getConfigEnvValues(flinkCommandArgs.getConfigFile())
-                    .entrySet()
-                    .stream()
-                    .sorted(Comparator.comparing(Map.Entry::getKey))
-                    .forEach(entry -> command.add("-D" + entry.getKey() + "=" + entry.getValue()));
-        }
-
         return command;
-
     }
 }
