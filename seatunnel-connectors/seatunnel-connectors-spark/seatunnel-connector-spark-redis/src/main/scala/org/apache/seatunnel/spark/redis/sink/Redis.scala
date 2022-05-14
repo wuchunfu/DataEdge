@@ -19,7 +19,7 @@ package org.apache.seatunnel.spark.redis.sink
 
 import com.alibaba.fastjson.JSONObject
 import com.redislabs.provider.redis.{RedisConfig, RedisEndpoint, toRedisContext}
-import org.apache.seatunnel.common.config.{CheckConfigUtil, CheckResult}
+import org.apache.seatunnel.common.config.CheckResult
 import org.apache.seatunnel.spark.SparkEnvironment
 import org.apache.seatunnel.spark.batch.SparkBatchSink
 import org.apache.seatunnel.spark.redis.common.Constants.{AUTH, DATA_TYPE, DB_NUM, DEFAULT_AUTH, DEFAULT_DATA_TYPE, DEFAULT_DB_NUM, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, HASH_NAME, HOST, LIST_NAME, PORT, SET_NAME, TIMEOUT, ZSET_NAME}
@@ -58,8 +58,6 @@ class Redis extends SparkBatchSink with Logging {
   }
 
   override def checkConfig(): CheckResult = {
-    CheckConfigUtil.checkAllExists(config, HOST, PORT)
-
     if (config.containsKey(DATA_TYPE)) {
       val dataType = config.getString(DATA_TYPE)
       val dataTypeList = List("KV", "HASH", "SET", "ZSET", "LIST")
